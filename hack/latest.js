@@ -6,8 +6,9 @@ var request = require('request'),
       '0.12': undefined,
       '4': undefined,
       '5': undefined,
-      '6': undefined};
-    
+      '6': undefined,
+      '7': undefined};
+
 function parse_releases(json_releases){
   var releases = JSON.parse(json_releases);
   var versions = [];
@@ -16,10 +17,10 @@ function parse_releases(json_releases){
     var release_ver = releases[release]['version'];
     for(var major_version in latest_releases){
       if(semver.satisfies(release_ver, major_version)){
-	if( typeof(latest_releases[major_version]) == 'undefined' || 
-	    semver.gt(release_ver, latest_releases[major_version])){
-          latest_releases[major_version] = semver.clean(release_ver);
-	}
+        if(typeof(latest_releases[major_version]) == 'undefined' ||
+            semver.gt(release_ver, latest_releases[major_version])){
+                latest_releases[major_version] = semver.clean(release_ver);
+        }
       }
     }
   }
