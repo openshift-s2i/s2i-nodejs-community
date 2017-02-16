@@ -17,27 +17,27 @@
             "annotations": {
               "description": "Build and run NodeJS applications",
               "iconClass": "icon-nodejs",
-              "tags": "builder,nodejs,nodejs-0.10.46",
+              "tags": "builder,nodejs,nodejs-0.10.48",
               "supports":"nodejs:0.10,nodejs",
               "sampleRepo": "https://github.com/ryanj/pillar-base.git"
             },
             "from": {
               "kind": "ImageStreamTag",
-              "name": "0.10.46"
+              "name": "0.10.48"
             }
           },
           {
-            "name": "0.10.46",
+            "name": "0.10.48",
             "annotations": {
               "description": "Build and run NodeJS applications",
               "iconClass": "icon-nodejs",
-              "tags": "builder,nodejs,nodejs-0.10.46",
+              "tags": "builder,nodejs,nodejs-0.10.48",
               "supports":"nodejs:0.10,nodejs",
               "sampleRepo": "https://github.com/ryanj/pillar-base.git"
             },
             "from": {
               "kind": "DockerImage",
-              "name": "ryanj/centos7-s2i-nodejs:0.10.46"
+              "name": "ryanj/centos7-s2i-nodejs:0.10.48"
             }
           },
           {
@@ -45,27 +45,27 @@
             "annotations": {
               "description": "Build and run NodeJS applications",
               "iconClass": "icon-nodejs",
-              "tags": "builder,nodejs,nodejs-0.12.15",
+              "tags": "builder,nodejs,nodejs-0.12.18",
               "supports":"nodejs:0.12,nodejs",
               "sampleRepo": "https://github.com/ryanj/pillar-base.git"
             },
             "from": {
               "kind": "ImageStreamTag",
-              "name": "0.12.15"
+              "name": "0.12.18"
             }
           },
           {
-            "name": "0.12.15",
+            "name": "0.12.18",
             "annotations": {
               "description": "Build and run NodeJS applications",
               "iconClass": "icon-nodejs",
-              "tags": "builder,nodejs,nodejs-0.12.15",
+              "tags": "builder,nodejs,nodejs-0.12.18",
               "supports":"nodejs:0.12,nodejs",
               "sampleRepo": "https://github.com/ryanj/pillar-base.git"
             },
             "from": {
               "kind": "DockerImage",
-              "name": "ryanj/centos7-s2i-nodejs:0.12.15"
+              "name": "ryanj/centos7-s2i-nodejs:0.12.18"
             }
           },
           {
@@ -73,13 +73,13 @@
             "annotations": {
               "description": "Build and run NodeJS applications",
               "iconClass": "icon-nodejs",
-              "tags": "builder,nodejs,nodejs-4.4.7",
+              "tags": "builder,nodejs,nodejs-4.7.3",
               "supports":"nodejs:4,nodejs:4.4,nodejs",
               "sampleRepo": "https://github.com/ryanj/pillar-base.git"
             },
             "from": {
               "kind": "ImageStreamTag",
-              "name": "4.4.7"
+              "name": "4.7.3"
             }
           },
           {
@@ -87,41 +87,27 @@
             "annotations": {
               "description": "Build and run NodeJS applications",
               "iconClass": "icon-nodejs",
-              "tags": "builder,nodejs,nodejs-4.4.7",
+              "tags": "builder,nodejs,nodejs-4.7.3",
               "supports":"nodejs:4,nodejs:4.4,nodejs",
               "sampleRepo": "https://github.com/ryanj/pillar-base.git"
             },
             "from": {
               "kind": "ImageStreamTag",
-              "name": "4.4.7"
+              "name": "4.7.3"
             }
           },
           {
-            "name": "4.4.7",
+            "name": "4.7.3",
             "annotations": {
               "description": "Build and run NodeJS applications",
               "iconClass": "icon-nodejs",
-              "tags": "builder,nodejs,nodejs-4.4.7",
+              "tags": "builder,nodejs,nodejs-4.7.3",
               "supports":"nodejs:4,nodejs:4.4,nodejs",
               "sampleRepo": "https://github.com/ryanj/pillar-base.git"
             },
             "from": {
               "kind": "DockerImage",
-              "name": "ryanj/centos7-s2i-nodejs:4.4.7"
-            }
-          },
-          {
-            "name": "5.11",
-            "annotations": {
-              "description": "Build and run NodeJS applications",
-              "iconClass": "icon-nodejs",
-              "tags": "builder,nodejs,nodejs-5.12.0",
-              "supports":"nodejs:5,nodejs:5.11,nodejs",
-              "sampleRepo": "https://github.com/ryanj/pillar-base.git"
-            },
-            "from": {
-              "kind": "ImageStreamTag",
-              "name": "5.12.0"
+              "name": "ryanj/centos7-s2i-nodejs:4.7.3"
             }
           },
           {
@@ -130,7 +116,7 @@
               "description": "Build and run NodeJS applications",
               "iconClass": "icon-nodejs",
               "tags": "builder,nodejs,nodejs-5.12.0",
-              "supports":"nodejs:5,nodejs:5.11,nodejs",
+              "supports":"nodejs:5,nodejs:5.12,nodejs",
               "sampleRepo": "https://github.com/ryanj/pillar-base.git"
             },
             "from": {
@@ -143,8 +129,8 @@
             "annotations": {
               "description": "Build and run NodeJS applications",
               "iconClass": "icon-nodejs",
-              "tags": "builder,nodejs,nodejs-5.12.0,nodejs-latest",
-              "supports":"nodejs:5,nodejs:5.11,nodejs",
+              "tags": "builder,nodejs,nodejs-5.12.0",
+              "supports":"nodejs:5,nodejs:5.12,nodejs",
               "version": "5.12.0",
               "sampleRepo": "https://github.com/ryanj/pillar-base.git"
             },
@@ -172,7 +158,22 @@
             "annotations": {
               "description": "Build and run NodeJS applications",
               "iconClass": "icon-nodejs",
-              "tags": "builder,nodejs,nodejs-6.9.5,nodejs-latest",
+              "tags": "builder,nodejs,nodejs-6.9.5",
+              "supports":"nodejs:6,nodejs:6.9,nodejs",
+              "version": "6.9.5",
+              "sampleRepo": "https://github.com/ryanj/pillar-base.git"
+            },
+            "from": {
+              "kind": "ImageStreamTag",
+              "name": "6.9.5"
+            }
+          },
+          {
+            "name": "6.9.5",
+            "annotations": {
+              "description": "Build and run NodeJS applications",
+              "iconClass": "icon-nodejs",
+              "tags": "builder,nodejs,nodejs-6.9.5",
               "supports":"nodejs:6,nodejs:6.9,nodejs",
               "version": "6.9.5",
               "sampleRepo": "https://github.com/ryanj/pillar-base.git"
@@ -183,18 +184,47 @@
             }
           },
           {
-            "name": "6.9.5",
+            "name": "7",
             "annotations": {
               "description": "Build and run NodeJS applications",
               "iconClass": "icon-nodejs",
-              "tags": "builder,nodejs,nodejs-6.9.5,nodejs-latest",
-              "supports":"nodejs:6,nodejs:6.9,nodejs",
-              "version": "6.9.5",
+              "tags": "builder,nodejs,nodejs-7.5.0",
+              "supports":"nodejs:7,nodejs:7.5,nodejs",
+              "sampleRepo": "https://github.com/ryanj/pillar-base.git"
+            },
+            "from": {
+              "kind": "ImageStreamTag",
+              "name": "7.5.0"
+            }
+          },
+          {
+            "name": "7.5",
+            "annotations": {
+              "description": "Build and run NodeJS applications",
+              "iconClass": "icon-nodejs",
+              "tags": "builder,nodejs,nodejs-7.5.0,nodejs-latest",
+              "supports":"nodejs:7,nodejs:7.5,nodejs",
+              "version": "7.5.0",
+              "sampleRepo": "https://github.com/ryanj/pillar-base.git"
+            },
+            "from": {
+              "kind": "ImageStreamTag",
+              "name": "7.5.0"
+            }
+          },
+          {
+            "name": "7.5.0",
+            "annotations": {
+              "description": "Build and run NodeJS applications",
+              "iconClass": "icon-nodejs",
+              "tags": "builder,nodejs,nodejs-7.5.0,nodejs-latest",
+              "supports":"nodejs:7,nodejs:7.5,nodejs",
+              "version": "7.5.0",
               "sampleRepo": "https://github.com/ryanj/pillar-base.git"
             },
             "from": {
               "kind": "DockerImage",
-              "name": "ryanj/centos7-s2i-nodejs:6.9.5"
+              "name": "ryanj/centos7-s2i-nodejs:7.5.0"
             }
           },
           {
@@ -212,56 +242,13 @@
             }
           },
           {
-            "name": "7",
-            "annotations": {
-              "description": "Build and run NodeJS applications",
-              "iconClass": "icon-nodejs",
-              "tags": "builder,nodejs,nodejs-7.5.0",
-              "supports":"nodejs:7,nodejs:6.5,nodejs",
-              "sampleRepo": "https://github.com/ryanj/pillar-base.git"
-            },
-            "from": {
-              "kind": "ImageStreamTag",
-              "name": "7.5.0"
-            }
-          },
-          {
-            "name": "7.5",
-            "annotations": {
-              "description": "Build and run NodeJS applications",
-              "iconClass": "icon-nodejs",
-              "tags": "builder,nodejs,nodejs-6.9.5,nodejs-latest",
-              "supports":"nodejs:7,nodejs:7.5,nodejs",
-              "version": "7.5.0",
-              "sampleRepo": "https://github.com/ryanj/pillar-base.git"
-            },
-            "from": {
-              "kind": "DockerImage",
-              "name": "ryanj/centos7-s2i-nodejs:7.5.0"
-            }
-          },
-          {
-            "name": "7.5.0",
-            "annotations": {
-              "description": "Build and run NodeJS applications",
-              "iconClass": "icon-nodejs",
-              "tags": "builder,nodejs,nodejs-7.5.0,nodejs-latest",
-              "supports":"nodejs:7,nodejs:7.5,nodejs",
-              "version": "7.5.0",
-              "sampleRepo": "https://github.com/ryanj/pillar-base.git"
-            },
-            "from": {
-              "kind": "DockerImage",
-              "name": "ryanj/centos7-s2i-nodejs:6.9.5"
-            }
-          },
-          {
             "name": "latest",
             "annotations": {
-              "description": "Build and run NodeJS applications",
+              "openshift.io/display-name": "NodeJS (Latest)",
+              "description": "Build and run NodeJS applications on CentOS 7",
               "iconClass": "icon-nodejs",
-              "tags": "builder,nodejs,nodejs-6.9.5",
-              "supports":"nodejs:6,nodejs:6.9,nodejs",
+              "tags": "builder,nodejs",
+              "supports": "nodejs",
               "sampleRepo": "https://github.com/ryanj/pillar-base.git"
             },
             "from": {
@@ -272,10 +259,11 @@
           {
             "name": "current",
             "annotations": {
-              "description": "Build and run NodeJS applications",
+              "openshift.io/display-name": "NodeJS (Latest)",
+              "description": "Build and run NodeJS applications on CentOS 7",
               "iconClass": "icon-nodejs",
-              "tags": "builder,nodejs,nodejs-6.9.5,nodejs-current",
-              "supports":"nodejs:6,nodejs:6.9,nodejs",
+              "tags": "builder,nodejs",
+              "supports": "nodejs",
               "sampleRepo": "https://github.com/ryanj/pillar-base.git"
             },
             "from": {
