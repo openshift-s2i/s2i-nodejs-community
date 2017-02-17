@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# This script is used to build, test and squash the OpenShift Docker images.
+# This script is used to build and test the OpenShift Docker images.
 #
 # Name of resulting image will be: 'NAMESPACE/OS-BASE_IMAGE_NAME:NODE_VERSION'.
 #
@@ -28,18 +28,7 @@ function docker_build_with_version {
   sed -i.bak -e "s/NODE_VERSION *= *.*/NODE_VERSION=${version} \\\/" "${DOCKERFILE}.${version}"
   echo "LABEL io.origin.builder-version=\"${git_version}\"" >> "${DOCKERFILE}.${version}"
   docker build -t ${IMAGE_NAME}:${version} -f "${DOCKERFILE}.${version}" .
-  if [[ "${SKIP_SQUASH}" != "1" ]]; then
-    squash "${DOCKERFILE}.${version}"
-  fi
   rm -f "${DOCKERFILE}.${version}" "${DOCKERFILE}.${version}.bak"
-}
-
-# Install the docker squashing tool[1] and squash the result image
-# [1] https://github.com/goldmann/docker-squash
-function squash {
-  pip install -q --user -U docker-squash
-  base=$(awk '/^FROM/{print $2}' $1)
-  $(python -m site --user-base)/bin/docker-squash -f $base ${IMAGE_NAME}:${version}
 }
 
 # Specify a VERSION variable to build a specific nodejs.org release
