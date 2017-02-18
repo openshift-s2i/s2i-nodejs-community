@@ -10,7 +10,7 @@ EXPOSE 8080
 # Release version configuration:
 # Add $HOME/node_modules/.bin to the $PATH, allowing user to make npm scripts
 # available on the CLI without using npm's --global installation mode
-ENV NODE_VERSION=6.1.0 \
+ENV NODE_VERSION= \
     NPM_CONFIG_LOGLEVEL=info \
     PATH=$HOME/node_modules/.bin/:$PATH \
     NPM_VERSION=3 \
@@ -42,6 +42,7 @@ RUN set -ex && \
   ; do \
     gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
   done && \
+  yum install -y epel-release && \
   INSTALL_PKGS="bzip2 nss_wrapper" && \
   yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
   rpm -V $INSTALL_PKGS && \

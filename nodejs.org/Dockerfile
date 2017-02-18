@@ -11,7 +11,7 @@ EXPOSE 8080
 # See https://docs.npmjs.com/misc/scripts, and your repo's package.json
 # file for possible values of NPM_RUN
 ENV NPM_RUN=start \
-    NODE_VERSION=6.3.1 \
+    NODE_VERSION= \
     NPM_CONFIG_LOGLEVEL=info \
     NPM_CONFIG_PREFIX=$HOME/.npm-global \
     PATH=$HOME/node_modules/.bin/:$HOME/.npm-global/bin/:$PATH \
@@ -41,6 +41,7 @@ RUN set -ex && \
   ; do \
     gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
   done && \
+  yum install -y epel-release && \
   INSTALL_PKGS="bzip2 nss_wrapper" && \
   yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
   rpm -V $INSTALL_PKGS && \

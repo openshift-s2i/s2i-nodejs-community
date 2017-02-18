@@ -1,25 +1,38 @@
 #!/bin/bash
 #
-# The 'run' performs a simple test that verifies that STI image.
-# The main focus here is to excersise the STI scripts.
+# The 'run' performs a simple test that verifies that S2I image.
+# The main focus here is to exercise the S2I scripts.
+#
+# For more information see the documentation:
+# https://github.com/openshift/source-to-image/blob/master/docs/builder_image.md
 #
 # IMAGE_NAME specifies a name of the candidate image used for testing.
 # The image has to be available before this script is executed.
 #
+
 IMAGE_NAME=${IMAGE_NAME-ryanj/centos7-s2i-nodejs-candidate}
 NODE_VERSION=${NODE_VERSION}
 IMAGE_TAG=${IMAGE_NAME}":"${NODE_VERSION};
 
-test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
-image_dir=$(readlink -zf ${test_dir}/..)
-cid_file=$(mktemp -u --suffix=.cid)
+# Determining system utility executables (darwin compatibility check)
+READLINK_EXEC="readlink"
+MKTEMP_EXEC="mktemp"
+if (echo "$OSTYPE" | grep -qs 'darwin'); then
+  ! type -a "greadlink" &>"/dev/null" || READLINK_EXEC="greadlink"
+  ! type -a "gmktemp" &>"/dev/null" || MKTEMP_EXEC="gmktemp"
+fi
 
-# Since we built the candidate image locally, we don't want S2I attempt to pull
+test_project=${1:-test-app}
+test_dir="$($READLINK_EXEC -zf $(dirname "${0}"))"
+image_dir=$($READLINK_EXEC -zf ${test_dir}/..)
+cid_file=$($MKTEMP_EXEC -u --suffix=.cid)
+
+# Since we built the candidate image locally, we don't want S2I to attempt to pull
 # it from Docker hub
-s2i_args="--force-pull=false "
+s2i_args="--pull-policy=never "
 
-# TODO: This should be part of the image metadata
-test_port=8080
+# Port the image exposes service to be tested
+test_port="$(docker inspect --format='{{range $key, $value := .ContainerConfig.ExposedPorts }}{{$key}}{{end}}' ${IMAGE_TAG} | sed 's/\/.*//')"
 
 image_exists() {
   docker inspect $1 &>/dev/null
@@ -30,11 +43,19 @@ container_exists() {
 }
 
 container_ip() {
-  docker inspect --format="{{ .NetworkSettings.IPAddress }}" $(cat $cid_file)
+  if [ ! -z "$DOCKER_HOST" ] && (echo "$OSTYPE" | grep -qs 'darwin'); then
+    docker-machine ip
+  else
+    echo "localhost"
+  fi
+}
+
+container_port() {
+    docker inspect --format='{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' $(cat $cid_file)
 }
 
 run_s2i_build() {
-  s2i build ${s2i_args} file://${test_dir}/test-app ${IMAGE_TAG} ${IMAGE_NAME}-testapp
+  s2i build ${s2i_args} file://${test_dir}/${test_project} ${IMAGE_TAG} ${IMAGE_NAME}-${test_project}
 }
 
 prepare() {
@@ -42,9 +63,8 @@ prepare() {
     echo "ERROR: The image ${IMAGE_TAG} must exist before this script is executed."
     exit 1
   fi
-  # TODO: STI build require the application is a valid 'GIT' repository, we
-  # should remove this restriction in the future when a file:// is used.
-  pushd ${test_dir}/test-app >/dev/null
+  # s2i build requires the application is a valid 'Git' repository
+  pushd ${test_dir}/${test_project} >/dev/null
   git init
   git config user.email "build@localhost" && git config user.name "builder"
   git add -A && git commit --no-gpg-sign -m "Sample commit"
@@ -52,7 +72,8 @@ prepare() {
 }
 
 run_test_application() {
-  docker run --user=100001 --rm --cidfile=${cid_file} -p ${test_port} ${IMAGE_NAME}-testapp
+  echo "Starting test application"
+  docker run --rm --user=100001 --cidfile=${cid_file} -p ${test_port} ${IMAGE_NAME}-${test_project}
 }
 
 cleanup() {
@@ -60,17 +81,19 @@ cleanup() {
     if container_exists; then
       docker stop $(cat $cid_file)
     fi
+    rm -rf $cid_file
   fi
-  if image_exists ${IMAGE_NAME}-testapp; then
-    docker rmi -f ${IMAGE_NAME}-testapp
+  if image_exists ${IMAGE_NAME}-${test_project}; then
+    echo "Removing image ${IMAGE_NAME}-${test_project}"
+    docker rmi -f ${IMAGE_NAME}-${test_project}
   fi
-  rm -rf ${test_dir}/test-app/.git
+  rm -rf ${test_dir}/${test_project}/.git
 }
 
 check_result() {
   local result="$1"
   if [[ "$result" != "0" ]]; then
-    echo "STI image '${IMAGE_TAG}' test FAILED (exit code: ${result})"
+    echo "S2I image '${IMAGE_TAG}' test FAILED (exit code: ${result})"
     cleanup
     exit $result
   fi
@@ -82,11 +105,13 @@ wait_for_cid() {
   local attempt=1
   local result=1
   while [ $attempt -le $max_attempts ]; do
-    [ -f $cid_file ] && [ -s $cid_file ] && break
-    echo "Waiting for container start..."
+    [ -f $cid_file ] && container_exists && break
+    echo "Waiting for container to start..."
     attempt=$(( $attempt + 1 ))
     sleep $sleep_time
   done
+  echo "Waiting for test application start, sleep 5 seconds"
+  sleep 5
 }
 
 test_s2i_usage() {
@@ -96,7 +121,7 @@ test_s2i_usage() {
 
 test_docker_run_usage() {
   echo "Testing 'docker run' usage..."
-  docker run ${IMAGE_TAG} &>/dev/null
+  docker run --rm ${IMAGE_TAG} &>/dev/null
 }
 
 test_connection() {
@@ -105,9 +130,10 @@ test_connection() {
   local sleep_time=1
   local attempt=1
   local result=1
+
   while [ $attempt -le $max_attempts ]; do
-    echo "Sending GET request to http://$(container_ip):${test_port}/"
-    response_code=$(curl -s -w %{http_code} -o /dev/null http://$(container_ip):${test_port}/)
+    echo "Sending GET request($attempt) to http://$(container_ip):$(container_port)/"
+    response_code=$(curl -s -w %{http_code} -o /dev/null http://$(container_ip):$(container_port)/)
     status=$?
     if [ $status -eq 0 ]; then
       if [ $response_code -eq 200 ]; then
@@ -115,6 +141,7 @@ test_connection() {
       fi
       break
     fi
+    echo "Validating response_code($response_code) == 200"
     attempt=$(( $attempt + 1 ))
     sleep $sleep_time
   done
@@ -212,3 +239,6 @@ check_result $?
 
 echo "Success!"
 cleanup
+
+check_result $?
+echo "All tests finished successfully."
